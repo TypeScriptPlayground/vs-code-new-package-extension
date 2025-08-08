@@ -1,0 +1,27 @@
+{
+  "name": "Node.js 22 & TypeScript ESM",
+  "containerEnv": {
+    "NODE_ENV": "development"
+  },
+  "image": "node:22",
+
+  "mounts": [
+    {
+      "type": "volume",
+      "target": "${containerWorkspaceFolder}/node_modules"
+    },
+    {
+      "type": "volume",
+      "target": "${containerWorkspaceFolder}/build"
+    }
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "postCreateCommand": "npm install"
+}

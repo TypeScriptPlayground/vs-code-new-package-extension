@@ -1,0 +1,41 @@
+{
+  "name": "vs-code-new-package-extension",
+  "displayName": "VS-Code New Package Extension",
+  "description": "Adds a 'New Package...' option to the VS Code Explorer context menu to create a folder with an index.ts file.",
+  "version": "0.0.1",
+  "type": "module",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./build/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "new-package-extension.createPackage",
+        "title": "New Package..."
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "new-package-extension.createPackage",
+          "group": "navigation@2",
+          "when": "explorerResourceIsFolder"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.6.3"
+  }
+}
