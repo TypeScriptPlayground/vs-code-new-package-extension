@@ -5,41 +5,47 @@
   "version": "0.0.1",
   "publisher": "Mqxx",
   "repository": "https://github.com/TypeScriptPlayground/vs-code-new-package-extension",
-  "type": "module",
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
     "Other"
   ],
-  "main": "./build/extension.js",
+  "main": "./dist/extension.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "package": "npm run build && vsce package"
+  },
   "contributes": {
     "commands": [
       {
-        "command": "vs-code-new-package-extension.createPackage",
-        "title": "New Package..."
+        "command": "extension.newPackage",
+        "title": "New Package...",
+        "category": "Explorer"
       }
     ],
     "menus": {
       "explorer/context": [
         {
-          "command": "vs-code-new-package-extension.createPackage",
-          "group": "navigation@2",
-          "when": "explorerResourceIsFolder"
+          "command": "extension.newPackage",
+          "when": "explorerResourceIsFolder || explorerViewletVisible",
+          "group": "navigation@2"
         }
       ]
-    }
+    },
+    "keybindings": [
+      {
+        "command": "extension.newPackage",
+        "key": "shift+p",
+        "when": "explorerViewletVisible"
+      }
+    ]
   },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "package": "vsce package"
-  },
+  "type": "module",
   "devDependencies": {
-    "@types/node": "^22.7.4",
+    "@types/node": "^22.0.0",
     "@types/vscode": "^1.85.0",
-    "typescript": "^5.6.3",
+    "typescript": "^5.5.4",
     "@vscode/vsce": "^2.15.0"
   }
 }

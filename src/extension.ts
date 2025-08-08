@@ -1,41 +1,50 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as path from 'path';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
-export function activate(context: vscode.ExtensionContext) {
-  let disposable = vscode.commands.registerCommand('new-package-extension.createPackage', async (uri: vscode.Uri) => {
-    // Get the folder path where the context menu was triggered
-    const folderPath = uri.fsPath;
+export async function activate(context: vscode.ExtensionContext) {
+    const disposable = vscode.commands.registerCommand('extension.newPackage', async (uri: vscode.Uri) => {
+        try {
+            // Falls kein Ziel gewählt wurde → Arbeitsbereich
+            let targetDir: string;
+            if (uri && uri.fsPath) {
+                targetDir = uri.fsPath;
+            } else if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0) {
+                targetDir = vscode.workspace.workspaceFolders[0].uri.fsPath;
+            } else {
+                vscode.window.showErrorMessage('No workspace folder open.');
+                return;
+            }
 
-    // Prompt user for the new package folder name
-    const folderName = await vscode.window.showInputBox({
-      prompt: 'Enter the name of the new package folder',
-      placeHolder: 'Package name'
+            // Ordnername erfragen
+            const folderName = await vscode.window.showInputBox({
+                prompt: 'Enter the new package name',
+                placeHolder: 'my-package'
+            });
+
+            if (!folderName) {
+                return;
+            }
+
+            const packagePath = join(targetDir, folderName);
+
+            // Ordner anlegen
+            await mkdir(packagePath, { recursive: true });
+
+            // index.ts anlegen
+            const indexFilePath = join(packagePath, 'index.ts');
+            await writeFile(indexFilePath, '', { encoding: 'utf8' });
+
+            // Datei im Editor öffnen
+            const doc = await vscode.workspace.openTextDocument(indexFilePath);
+            await vscode.window.showTextDocument(doc);
+
+        } catch (error) {
+            vscode.window.showErrorMessage(`Failed to create package: ${String(error)}`);
+        }
     });
 
-    if (!folderName) {
-      vscode.window.showErrorMessage('No folder name provided.');
-      return;
-    }
-
-    // Create the full path for the new folder
-    const newFolderPath = path.join(folderPath, folderName);
-
-    try {
-      // Create the new folder
-      await fs.promises.mkdir(newFolderPath, { recursive: true });
-
-      // Create the index.ts file inside the new folder
-      const indexFilePath = path.join(newFolderPath, 'index.ts');
-      await fs.promises.writeFile(indexFilePath, '// Index file for the package\n');
-
-      vscode.window.showInformationMessage(`Package '${folderName}' created successfully with index.ts`);
-    } catch (error: any) {
-      vscode.window.showErrorMessage(`Failed to create package: ${error.message}`);
-    }
-  });
-
-  context.subscriptions.push(disposable);
+    context.subscriptions.push(disposable);
 }
 
 export function deactivate() {}
