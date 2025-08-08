@@ -5,7 +5,7 @@ import { join } from 'node:path';
 export async function activate(context: vscode.ExtensionContext) {
     const disposable = vscode.commands.registerCommand('extension.newPackage', async (uri: vscode.Uri) => {
         try {
-            // Falls kein Ziel gewählt wurde → Arbeitsbereich
+            // Zielverzeichnis ermitteln
             let targetDir: string;
             if (uri && uri.fsPath) {
                 targetDir = uri.fsPath;
@@ -16,7 +16,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 return;
             }
 
-            // Ordnername erfragen
+            // Ordnername abfragen
             const folderName = await vscode.window.showInputBox({
                 prompt: 'Enter the new package name',
                 placeHolder: 'my_package'
@@ -26,17 +26,26 @@ export async function activate(context: vscode.ExtensionContext) {
                 return;
             }
 
+            const config = vscode.workspace.getConfiguration('newPackage');
+            const fileNameSetting = config.get<string>('fileName', 'index.ts');
+            const fileContentTemplate = config.get<string>('fileContent', '');
+
             const packagePath = join(targetDir, folderName);
 
             // Ordner anlegen
             await mkdir(packagePath, { recursive: true });
 
-            // index.ts anlegen
-            const indexFilePath = join(packagePath, 'index.ts');
-            await writeFile(indexFilePath, 'export {}', { encoding: 'utf8' });
+            // Template-Variablen ersetzen
+            const fileContent = fileContentTemplate
+                .replace(/\$\{fileName\}/g, fileNameSetting)
+                .replace(/\$\{packageName\}/g, folderName);
+
+            // Datei schreiben
+            const filePath = join(packagePath, fileNameSetting);
+            await writeFile(filePath, fileContent, { encoding: 'utf8' });
 
             // Datei im Editor öffnen
-            const doc = await vscode.workspace.openTextDocument(indexFilePath);
+            const doc = await vscode.workspace.openTextDocument(filePath);
             await vscode.window.showTextDocument(doc);
 
         } catch (error) {

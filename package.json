@@ -17,6 +17,23 @@
     "package": "npm run build && vsce package"
   },
   "contributes": {
+    "configuration": {
+      "title": "New Package Extension Settings",
+      "properties": {
+        "newPackage.fileContent": {
+          "type": "string",
+          "default": "export {};",
+          "markdownDescription": "Default content for the created file.\nSupported variables:\n- `${fileName}` - The file name\n- `${packageName}` - The package name",
+          "scope": "resource",
+          "editPresentation": "multilineText"
+        },
+        "newPackage.fileName": {
+          "type": "string",
+          "default": "index.ts",
+          "description": "File name for the main file created in the new package folder."
+        }
+      }
+    },
     "commands": [
       {
         "command": "extension.newPackage",
@@ -48,7 +65,7 @@
       {
         "command": "extension.newPackage",
         "key": "shift+p",
-        "when": "explorerViewletVisible"
+        "when": "explorerViewletVisible && explorerViewletFocus"
       }
     ]
   },
