@@ -3,13 +3,15 @@
   "displayName": "VS-Code New Package Extension",
   "description": "Adds a 'New Package...' option to the VS Code Explorer context menu to create a folder with an index.ts file.",
   "version": "0.0.1",
+  "license": "./LICENSE",
+  "readme": "./REAMDE.md",
   "publisher": "Mqxx",
   "repository": "https://github.com/TypeScriptPlayground/vs-code-new-package-extension",
   "files": [
     "dist/**/*",
     "resources/**/*",
     "README.md",
-    "LICENSE"
+    "LICENSE.md"
   ],
   "engines": {
     "vscode": "^1.85.0"
