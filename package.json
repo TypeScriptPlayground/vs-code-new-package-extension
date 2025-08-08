@@ -64,7 +64,7 @@
       "view/title": [
         {
           "command": "extension.newPackage",
-          "when": "view == explorer",
+          "when": "view == workbench.explorer.fileView",
           "group": "navigation@1"
         }
       ]
