@@ -30,7 +30,7 @@
         "newPackage.fileName": {
           "type": "string",
           "default": "index.ts",
-          "description": "File name for the main file created in the new package folder."
+          "markdownDescription": "File name for the main file created in the new package folder."
         }
       }
     },
