@@ -21,7 +21,11 @@
       {
         "command": "extension.newPackage",
         "title": "New Package...",
-        "category": "Explorer"
+        "category": "Explorer",
+        "icon": {
+          "light": "resources/icons/package_light.svg",
+          "dark": "resources/icons/package_dark.svg"
+        }
       }
     ],
     "menus": {
@@ -29,7 +33,14 @@
         {
           "command": "extension.newPackage",
           "when": "explorerResourceIsFolder || explorerViewletVisible",
-          "group": "navigation@2"
+          "group": "navigation@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "extension.newPackage",
+          "when": "view == explorer",
+          "group": "navigation@1"
         }
       ]
     },

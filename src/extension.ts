@@ -19,7 +19,7 @@ export async function activate(context: vscode.ExtensionContext) {
             // Ordnername erfragen
             const folderName = await vscode.window.showInputBox({
                 prompt: 'Enter the new package name',
-                placeHolder: 'my-package'
+                placeHolder: 'my_package'
             });
 
             if (!folderName) {
@@ -33,7 +33,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
             // index.ts anlegen
             const indexFilePath = join(packagePath, 'index.ts');
-            await writeFile(indexFilePath, '', { encoding: 'utf8' });
+            await writeFile(indexFilePath, 'export {}', { encoding: 'utf8' });
 
             // Datei im Editor öffnen
             const doc = await vscode.workspace.openTextDocument(indexFilePath);
