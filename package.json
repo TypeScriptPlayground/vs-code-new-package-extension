@@ -47,10 +47,7 @@
         "command": "extension.newPackage",
         "title": "New Package...",
         "category": "Explorer",
-        "icon": {
-          "light": "resources/icons/package_light.svg",
-          "dark": "resources/icons/package_dark.svg"
-        }
+        "icon": "resources/icons/package.svg"
       }
     ],
     "menus": {
