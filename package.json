@@ -9,7 +9,6 @@
   "repository": "https://github.com/TypeScriptPlayground/vs-code-new-package-extension",
   "files": [
     "dist/**/*",
-    "resources/**/*",
     "README.md",
     "LICENSE.md"
   ],
@@ -47,7 +46,7 @@
         "command": "extension.newPackage",
         "title": "New Package...",
         "category": "Explorer",
-        "icon": "resources/icons/package.svg"
+        "icon": "$(package)"
       }
     ],
     "menus": {
