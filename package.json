@@ -5,6 +5,12 @@
   "version": "0.0.1",
   "publisher": "Mqxx",
   "repository": "https://github.com/TypeScriptPlayground/vs-code-new-package-extension",
+  "files": [
+    "dist/**/*",
+    "resources/**/*",
+    "README.md",
+    "LICENSE"
+  ],
   "engines": {
     "vscode": "^1.85.0"
   },
