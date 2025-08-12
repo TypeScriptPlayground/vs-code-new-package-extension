@@ -29,7 +29,7 @@
       "properties": {
         "newPackage.fileContent": {
           "type": "string",
-          "default": "export {};",
+          "default": "export {};\n",
           "markdownDescription": "Default content for the created file.\nSupported variables:\n- `${fileName}` - The file name\n- `${packageName}` - The package name",
           "scope": "resource",
           "editPresentation": "multilineText"
