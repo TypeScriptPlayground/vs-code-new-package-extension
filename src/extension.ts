@@ -1,8 +1,25 @@
 import * as vscode from 'vscode';
 import { mkdir, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { join, basename } from 'node:path';
 
 export async function activate(context: vscode.ExtensionContext) {
+  const config = vscode.workspace.getConfiguration('newPackage');
+  const fileNameSetting = config.get<string>('fileName', 'index.ts');
+  const fileContentTemplate = config.get<string>('fileContent', '');
+
+  const provider = vscode.window.registerFileDecorationProvider({
+    provideFileDecoration(uri) {
+      if (basename(uri.fsPath) === fileNameSetting) {
+        return {
+          badge: "_", // du kannst hier auch "★" oder "·" verwenden
+          tooltip: "Entrypoint (index.ts)",
+          color: new vscode.ThemeColor("charts.blue"),
+        };
+      }
+      return undefined;
+    }
+  });
+
   const disposable = vscode.commands.registerCommand('extension.newPackage', async (uri: vscode.Uri) => {
     let targetDir: string;
     if (uri && uri.fsPath) {
@@ -23,9 +40,7 @@ export async function activate(context: vscode.ExtensionContext) {
       return;
     }
 
-    const config = vscode.workspace.getConfiguration('newPackage');
-    const fileNameSetting = config.get<string>('fileName', 'index.ts');
-    const fileContentTemplate = config.get<string>('fileContent', '');
+    
 
     const packagePath = join(targetDir, folderName);
 
@@ -53,6 +68,7 @@ export async function activate(context: vscode.ExtensionContext) {
     await vscode.window.showTextDocument(doc);
   });
 
+  context.subscriptions.push(provider);
   context.subscriptions.push(disposable);
 }
 
